@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Web.UI.WebControls;
-using Buildweek4;
 
 namespace Buildweek4
 {
@@ -13,31 +12,54 @@ namespace Buildweek4
         {
             if (!IsPostBack)
             {
+                if (Session["LoggedIn"] == null || !(bool)Session["LoggedIn"])
+                {
+                    divMessage.Visible = true;
+                    divMessage.InnerHtml = "<div class=\"text-center alert alert-warning\"> <h1>Effettuare il login prima di poter visualizzare il carrello</h1>" +
+                      "<a href=\"Login.aspx\" class=\"btn btn-primary\" >Effettua il login</a> </div>";
+                    return;
+                }
+
                 LoadCartItems();
             }
         }
 
         private void LoadCartItems()
         {
-            List<int> product = (List<int>)Session["ProductID"];
+            List<int> productIds = (List<int>)Session["ProductID"];
             DataTable dt = new DataTable();
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("nome", typeof(string));
             dt.Columns.Add("prezzo", typeof(double));
+            dt.Columns.Add("quantita", typeof(int));
 
-            if (product != null)
+            // Imposta la chiave primaria sulla colonna "Id"
+            dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
+
+            if (productIds != null)
             {
-                foreach (int id in product)
+                foreach (int productId in productIds)
                 {
                     try
                     {
                         DBConn.conn.Open();
-                        SqlCommand cmd = new SqlCommand($"SELECT * FROM Prodotti WHERE ID='{id}'", DBConn.conn);
+                        SqlCommand cmd = new SqlCommand($"SELECT * FROM Prodotti WHERE ID='{productId}'", DBConn.conn);
                         SqlDataReader dataReader = cmd.ExecuteReader();
                         if (dataReader.HasRows)
                         {
                             dataReader.Read();
-                            dt.Rows.Add(dataReader["Id"], dataReader["nome"], dataReader["prezzo"]);
+                            DataRow existingRow = dt.Rows.Find(productId);
+                            if (existingRow != null)
+                            {
+                                // Articolo già presente nel carrello, incrementa la quantità
+                                existingRow["quantita"] = (int)existingRow["quantita"] + 1;
+                                
+                            }
+                            else
+                            {
+                                // Aggiungi un nuovo record al DataTable
+                                dt.Rows.Add(dataReader["Id"], dataReader["nome"], dataReader["prezzo"], 1);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -57,9 +79,10 @@ namespace Buildweek4
             rptCartItems.DataSource = dt;
             rptCartItems.DataBind();
 
-            double totCart = GetTotalCartAmount(product);
-            contentTot.InnerHtml = $"<h2>Totale: {totCart}€</h2>";
+            double totalCartAmount = GetTotalCartAmount(productIds);
+            contentTot.InnerHtml = $"<h2>Totale: {totalCartAmount}€</h2>";
         }
+
 
         private double GetTotalCartAmount(List<int> productIds)
         {
@@ -67,12 +90,12 @@ namespace Buildweek4
 
             if (productIds != null)
             {
-                foreach (int id in productIds)
+                foreach (int productId in productIds)
                 {
                     try
                     {
                         DBConn.conn.Open();
-                        SqlCommand cmd = new SqlCommand($"SELECT Prezzo FROM Prodotti WHERE ID='{id}'", DBConn.conn);
+                        SqlCommand cmd = new SqlCommand($"SELECT Prezzo FROM Prodotti WHERE ID='{productId}'", DBConn.conn);
                         object result = cmd.ExecuteScalar();
                         if (result != null)
                         {
@@ -101,13 +124,16 @@ namespace Buildweek4
             if (e.CommandName == "Delete")
             {
                 int productId = Convert.ToInt32(e.CommandArgument);
-                List<int> product = (List<int>)Session["ProductID"];
+                List<int> productIds = (List<int>)Session["ProductID"];
 
-                if (product != null)
+                if (productIds != null)
                 {
-                    product.Remove(productId);
-                    Session["ProductID"] = product;
-                    LoadCartItems(); // Ricarica gli elementi del carrello dopo l'eliminazione
+                    // Rimuovi l'articolo dal carrello
+                    productIds.Remove(productId);
+                    Session["ProductID"] = productIds;
+
+                    // Ricarica gli elementi del carrello dopo l'eliminazione
+                    LoadCartItems();
                 }
             }
         }

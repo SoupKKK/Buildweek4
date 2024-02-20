@@ -15,13 +15,58 @@ namespace Buildweek4
     {
 
         /// <summary>
+        /// Controllo divErrorMessage.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divErrorMessage;
+
+        /// <summary>
+        /// Controllo LoginContainer.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LoginContainer;
+
+        /// <summary>
+        /// Controllo txtRegisterUsername.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtRegisterUsername;
+
+        /// <summary>
+        /// Controllo txtRegisterPassword.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputPassword txtRegisterPassword;
+
+        /// <summary>
+        /// Controllo btnRegister.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRegister;
+
+        /// <summary>
         /// Controllo txtUsername.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtUsername;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtUsername;
 
         /// <summary>
         /// Controllo txtPassword.
@@ -30,7 +75,7 @@ namespace Buildweek4
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPassword;
+        protected global::System.Web.UI.HtmlControls.HtmlInputPassword txtPassword;
 
         /// <summary>
         /// Controllo btnLogin.

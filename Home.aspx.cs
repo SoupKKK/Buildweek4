@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace Buildweek4
 {
     public partial class Home : System.Web.UI.Page
     {
-
-
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -23,24 +15,55 @@ namespace Buildweek4
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Prodotti", DBConn.conn);
                 SqlDataReader dataReader = cmd.ExecuteReader();
 
-                string content = "";
+                string loggedInUser = Session["Username"] as string;
+
+                string content = "<div class=\"shell\"><div class=\"container\"><div class=\"row\">";
+
                 if (dataReader.HasRows)
                 {
                     while (dataReader.Read())
                     {
-                        content += $@"<div class=""card col-6 col-sm-4 col-md-3 m-3"">
-                                <img src=""{dataReader["immagine"]}"" class=""card-img-top m-auto imgArt "" alt=""{dataReader["nome"]}"">
-                                <div class=""card-body"">
-                                <h5 class=""card-title nomeArt"">{dataReader["nome"]}</h5>
-                                <p class=""card-text priceArt"">{dataReader["prezzo"]}€</p>
-                                <a href=""ProductDetails.aspx?product={dataReader["Id"]}"" class=""btn btn-success"">Dettaglio</a>
+                        content += $@"<div class=""col-6 col-sm-4 col-md-3"">
+                        <div class=""wsk-cp-product"">
+                            <div class=""wsk-cp-img"">
+                                <img src=""{dataReader["Immagine"]}"" alt=""Product"" class=""img-responsive"" />
+                            </div>
+                            <div class=""wsk-cp-text"">
+                                <div class=""title-product"">
+                                    <h3>{dataReader["nome"]}</h3>
                                 </div>
-                               </div>";
+                                <div class=""category"">
+                                    <a href=""ProductDetails.aspx?product={dataReader["Id"]}"">Dettagli</a>
+                                </div>
+    
+                                <div class=""card-footer"">
+                                    <div class=""wcf-left""><span class=""price"">{dataReader["prezzo"]}€</span></div>
+                                    ";
+
+                        // Aggiungi il pulsante "Aggiungi al carrello" solo se l'utente non è l'amministratore
+                        if (string.IsNullOrEmpty(loggedInUser) || loggedInUser.ToLower() != Admin.UserName.ToLower())
+                        {
+                            content += $@"<asp:Button runat=""server"" ID=""btnAddCart_{dataReader["Id"]}"" Text=""Aggiungi al carrello"" CssClass=""btn btn-outline-secondary"" OnClick=""btnAddCart_Click"" />";
+                        }
+
+                        // Aggiungi il pulsante "Modifica" solo se l'utente è l'amministratore
+                        if (!string.IsNullOrEmpty(loggedInUser) && loggedInUser.ToLower() == Admin.UserName.ToLower())
+                        {
+                            content += $@"<a href=""EditProduct.aspx?product={dataReader["Id"]}"" class=""btn btn-warning me-2"">Modifica</a>";
+                        }
+
+                        content += "</div></div></div></div>";
                     }
                 }
 
-                productContainer.InnerHtml = content;
 
+                if (!string.IsNullOrEmpty(loggedInUser) && loggedInUser.ToLower() == Admin.UserName)
+                {
+                    content += $@"<a href=""EditProduct.aspx"" class=""btn btn-success m-3"">AGGIUNGI ALLO SHOP </a>";
+                }
+
+
+                productContainer.InnerHtml = content;
             }
             catch (Exception ex)
             {
@@ -55,5 +78,7 @@ namespace Buildweek4
             }
         }
 
+
     }
+
 }

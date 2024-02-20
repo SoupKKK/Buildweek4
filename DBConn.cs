@@ -12,4 +12,10 @@ namespace Buildweek4
         private static string connectionString = ConfigurationManager.ConnectionStrings["DbShopConnectionString"].ToString();
         public static SqlConnection conn = new SqlConnection(connectionString);
     }
+
+    public static class Admin
+    {
+        public static string UserName = "peppino impastato";
+    }
+
 }
