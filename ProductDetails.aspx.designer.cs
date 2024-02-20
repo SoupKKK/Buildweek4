@@ -15,13 +15,13 @@ namespace BuildWeek4
     {
 
         /// <summary>
-        /// Controllo ttlProduct.
+        /// Controllo ProducDetailContainer.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ttlProduct;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ProducDetailContainer;
 
         /// <summary>
         /// Controllo img.
@@ -33,13 +33,13 @@ namespace BuildWeek4
         protected global::System.Web.UI.HtmlControls.HtmlImage img;
 
         /// <summary>
-        /// Controllo txtDescription.
+        /// Controllo ttlProduct.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtDescription;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ttlProduct;
 
         /// <summary>
         /// Controllo txtPrice.
@@ -49,6 +49,24 @@ namespace BuildWeek4
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtPrice;
+
+        /// <summary>
+        /// Controllo txtDescription.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtDescription;
+
+        /// <summary>
+        /// Controllo P3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl P3;
 
         /// <summary>
         /// Controllo btnAddCart.

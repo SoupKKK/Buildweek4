@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace Buildweek4.Models
 {
@@ -11,7 +6,28 @@ namespace Buildweek4.Models
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                SetNavigationVisibility();
+            }
+        }
 
+        protected void BtnLogout_Click(object sender, EventArgs e)
+        {
+            Session["LoggedIn"] = false;
+            Session["Username"] = "";
+            Response.Redirect("/Home.aspx");
+        }
+
+        private void SetNavigationVisibility()
+        {
+            bool isLoggedIn = Session["LoggedIn"] != null && (bool)Session["LoggedIn"];
+            bool isAdmin = isLoggedIn && Session["Username"].ToString().ToLower() == Admin.UserName.ToLower();
+
+            // Imposta la visibilità dei bottoni nella navbar
+            liLogin.Visible = !isLoggedIn;
+            btnLogout1.Visible = isLoggedIn;
+            liAdminShop.Visible = isAdmin;
         }
     }
 }

@@ -7,31 +7,60 @@ namespace Buildweek4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Verifica se l'utente è già loggato
+            if (Session["LoggedIn"] != null && (bool)Session["LoggedIn"])
+            {
+                // Utente già loggato, mostra messaggio di errore
+                divErrorMessage.Visible = true;
+                divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"> <h1>Sei già loggato. Nessuna necessità di accedere nuovamente.</h1>" +
+                    "</div>";
+                LoginContainer.Visible = false;                                
 
+            }
         }
 
-        protected void btnLogin_Click(object sender, EventArgs e)
+        protected void btnRegister_Click(object sender, EventArgs e)
         {
-            string username = txtUsername.Text;
-            string password = txtPassword.Text;
+            string registerUsername = txtRegisterUsername.Value;
+            string registerPassword = txtRegisterPassword.Value;
+
+            if (string.IsNullOrEmpty(registerUsername) || string.IsNullOrEmpty(registerPassword))
+            {
+                divErrorMessage.Visible = true;
+                divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"><h1>Inserisci Username e Password validi</h1></div>";
+            }
+            else
+            { 
+                if (AddNewUser(registerUsername, registerPassword))
+                {
+                    // Registrazione riuscita, puoi eseguire azioni aggiuntive se necessario
+                    divErrorMessage.Visible = true;
+                    divErrorMessage.InnerHtml = "<div class=\"alert alert-success\"><h1>Registrazione riuscita! Puoi accedere ora.</h1></div>";
+                }
+                else
+                {
+                    // Errore durante la registrazione, gestisci l'errore o visualizza un messaggio
+                    divErrorMessage.Visible = true;
+                    divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"><h1>Errore durante la registrazione. <br> Username già in uso.</h1></div>";
+                }
+            }
+        }
+
+        public void btnLogin_Click(object sender, EventArgs e)
+        {
+            string username = txtUsername.Value;
+            string password = txtPassword.Value;
 
             if (ValidateUser(username, password))
             {
-                // Utente esistente, esegui l'accesso
+                Session["LoggedIn"] = true;
+                Session["Username"] = username;
                 Response.Redirect("Home.aspx");
             }
             else
             {
-               
-                if (AddNewUser(username, password))
-                {
-                    
-                    Response.Redirect("Home.aspx");
-                }
-                else
-                {
-                    // Gestisci eventuali errori nell'aggiunta dell'utente
-                }
+                divErrorMessage.Visible = true;
+                divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"> <h1>Errore: Username non trovato. <br> Verifica le credenziali.</h1></div>";
             }
         }
 
@@ -55,6 +84,7 @@ namespace Buildweek4
                 }
             }
         }
+
 
         private bool AddNewUser(string username, string password)
         {
@@ -104,5 +134,6 @@ namespace Buildweek4
                 }
             }
         }
+
     }
 }

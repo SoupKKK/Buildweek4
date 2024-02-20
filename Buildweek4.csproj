@@ -68,8 +68,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cart.aspx" />
+    <Content Include="EditProduct.aspx" />
     <Content Include="Global.asax" />
     <Content Include="ProductDetails.aspx" />
+    <Content Include="ProductsTable.aspx" />
+    <Content Include="Style\Home.css" />
+    <Content Include="Style\Login.css" />
+    <Content Include="Style\Nav.css" />
+    <Content Include="Style\ProductDetails.css" />
     <Content Include="Web.config" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
@@ -83,6 +89,13 @@
       <DependentUpon>Cart.aspx</DependentUpon>
     </Compile>
     <Compile Include="DBConn.cs" />
+    <Compile Include="EditProduct.aspx.cs">
+      <DependentUpon>EditProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditProduct.aspx.designer.cs">
+      <DependentUpon>EditProduct.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -99,6 +112,13 @@
     </Compile>
     <Compile Include="ProductDetails.aspx.designer.cs">
       <DependentUpon>ProductDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductsTable.aspx.cs">
+      <DependentUpon>ProductsTable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductsTable.aspx.designer.cs">
+      <DependentUpon>ProductsTable.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Home.aspx.cs">

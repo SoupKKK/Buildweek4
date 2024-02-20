@@ -11,12 +11,29 @@ using System.Web.UI.WebControls;
 
 namespace BuildWeek4
 {
+    
     public partial class ProductDetails : System.Web.UI.Page
     {
 
-        private string ProductID;
+    private string ProductID;
+
+     
         protected void Page_Load(object sender, EventArgs e)
         {
+            string loggedInUser = Session["Username"] as string;
+
+
+            if (!string.IsNullOrEmpty(loggedInUser) && !loggedInUser.Equals(Admin.UserName, StringComparison.OrdinalIgnoreCase))
+            {
+                btnAddCart.Visible = true;
+            }
+            else
+            {
+                btnAddCart.Visible = false;
+            }
+
+
+
             if (Request.QueryString["product"] == null)
             {
                 Response.Redirect("Home.aspx");
@@ -34,7 +51,7 @@ namespace BuildWeek4
                     ttlProduct.InnerText = dataReader["nome"].ToString();
                     img.Src = dataReader["immagine"].ToString();
                     txtDescription.InnerText = dataReader["descrizione"].ToString();
-                    txtPrice.InnerText = dataReader["prezzo"].ToString();
+                    txtPrice.InnerText = dataReader["prezzo"].ToString() + " €";
 
 
                 }
