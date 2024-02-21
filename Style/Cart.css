@@ -1,0 +1,67 @@
+﻿body {
+    background-color: #DEDDDE;
+    font-family: 'Muli', sans-serif;
+}
+
+.cardCart {
+    background-color: white;
+    width: 97vw;
+    margin-top: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+img {
+    width: auto;
+    max-height: 200px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+button {
+}
+
+p {
+    margin: 10px;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.separatore {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.separatore1 {
+    display: flex;
+    align-items: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+#ContentPlaceHolder1_htmlContent {
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.separatore15 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cartQuantity {
+    background-color: #DEDDDE;
+    font-size: 0.8em;
+    border-radius: 2px;
+    padding: 5px;
+    border: 1px solid black;
+}

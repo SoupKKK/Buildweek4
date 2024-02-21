@@ -31,7 +31,9 @@
         </div>
 
         <p id="P3" runat="server"></p>
+        <div id="ProductDetailsBtns" runat="server">
         <asp:Button id="btnAddCart" runat="server" Text="Aggiungi al carrello" CssClass="btn btn-outline-secondary" OnClick="btnAddCart_Click" />
+        </div>
     </div>
 </section>
         

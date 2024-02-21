@@ -32,11 +32,13 @@ namespace Buildweek4
             dt.Columns.Add("nome", typeof(string));
             dt.Columns.Add("prezzo", typeof(double));
             dt.Columns.Add("quantita", typeof(int));
+            dt.Columns.Add("immagine", typeof(string));
+
 
             // Imposta la chiave primaria sulla colonna "Id"
             dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
 
-            if (productIds != null)
+            if(productIds != null)
             {
                 foreach (int productId in productIds)
                 {
@@ -49,19 +51,20 @@ namespace Buildweek4
                         {
                             dataReader.Read();
                             DataRow existingRow = dt.Rows.Find(productId);
+
                             if (existingRow != null)
                             {
                                 // Articolo già presente nel carrello, incrementa la quantità
                                 existingRow["quantita"] = (int)existingRow["quantita"] + 1;
-                                
                             }
                             else
                             {
                                 // Aggiungi un nuovo record al DataTable
-                                dt.Rows.Add(dataReader["Id"], dataReader["nome"], dataReader["prezzo"], 1);
+                                dt.Rows.Add(dataReader["Id"], dataReader["nome"], dataReader["prezzo"], 1, dataReader["immagine"]); // Imposta la quantità a 1
                             }
                         }
                     }
+
                     catch (Exception ex)
                     {
                         Response.Write(ex.ToString());
@@ -72,9 +75,17 @@ namespace Buildweek4
                         {
                             DBConn.conn.Close();
                         }
-                    }
+                    }              
                 }
             }
+            else
+            {
+                cartContainer.Visible = false;
+                divMessage.Visible = true;
+                divMessage.InnerHtml = "<div class=\"text-center alert alert-warning\"> <h1>CARRELLO VUOTO</h1>";
+                  
+            }
+
 
             rptCartItems.DataSource = dt;
             rptCartItems.DataBind();

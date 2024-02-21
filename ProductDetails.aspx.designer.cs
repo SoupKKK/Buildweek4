@@ -69,6 +69,15 @@ namespace BuildWeek4
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl P3;
 
         /// <summary>
+        /// Controllo ProductDetailsBtns.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ProductDetailsBtns;
+
+        /// <summary>
         /// Controllo btnAddCart.
         /// </summary>
         /// <remarks>

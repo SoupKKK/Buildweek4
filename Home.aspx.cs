@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using System.Web.UI.WebControls;
+using System.ComponentModel;
 
 namespace Buildweek4
 {
@@ -37,7 +38,7 @@ namespace Buildweek4
                                 </div>
     
                                 <div class=""card-footer"">
-                                    <div class=""wcf-left""><span class=""price"">{dataReader["prezzo"]}€</span></div>
+                                    <div class="" text-center""><span class=""price "">{dataReader["prezzo"]}€</span></div>
                                     ";
 
                         // Aggiungi il pulsante "Aggiungi al carrello" solo se l'utente non è l'amministratore
@@ -49,7 +50,7 @@ namespace Buildweek4
                         // Aggiungi il pulsante "Modifica" solo se l'utente è l'amministratore
                         if (!string.IsNullOrEmpty(loggedInUser) && loggedInUser.ToLower() == Admin.UserName.ToLower())
                         {
-                            content += $@"<a href=""EditProduct.aspx?product={dataReader["Id"]}"" class=""btn btn-warning me-2"">Modifica</a>";
+                            content += $@"<a href=""EditProduct.aspx?product={dataReader["Id"]}"" class=""btn btn-warning float-end my-1"">Modifica</a>";
                         }
 
                         content += "</div></div></div></div>";
@@ -59,7 +60,7 @@ namespace Buildweek4
 
                 if (!string.IsNullOrEmpty(loggedInUser) && loggedInUser.ToLower() == Admin.UserName)
                 {
-                    content += $@"<a href=""EditProduct.aspx"" class=""btn btn-success m-3"">AGGIUNGI ALLO SHOP </a>";
+                    content += $@"<a href=""EditProduct.aspx"" class=""btn btn-success m-3 p-2"">AGGIUNGI ALLO SHOP </a>";
                 }
 
 
