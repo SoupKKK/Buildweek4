@@ -1,0 +1,28 @@
+﻿.center-table {
+    margin: 0 auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.userCart {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0px 10px 20px 10px;
+}
+
+.productName {
+    font-weight: bold;
+}
+
+.productList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.productItem {
+    margin-bottom: 5px;
+}
+
+.column-margin {
+    margin-left: 20px;
+}

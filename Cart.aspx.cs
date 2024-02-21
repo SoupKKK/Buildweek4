@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Web.UI.WebControls;
+using System.Configuration;
 
 namespace Buildweek4
 {
@@ -16,7 +16,7 @@ namespace Buildweek4
                 {
                     divMessage.Visible = true;
                     divMessage.InnerHtml = "<div class=\"text-center alert alert-warning\"> <h1>Effettuare il login prima di poter visualizzare il carrello</h1>" +
-                      "<a href=\"Login.aspx\" class=\"btn btn-primary\" >Effettua il login</a> </div>";
+                        "<a href=\"Login.aspx\" class=\"btn btn-primary\" >Effettua il login</a> </div>";
                     return;
                 }
 
@@ -26,105 +26,73 @@ namespace Buildweek4
 
         private void LoadCartItems()
         {
-            List<int> productIds = (List<int>)Session["ProductID"];
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Id", typeof(int));
-            dt.Columns.Add("nome", typeof(string));
-            dt.Columns.Add("prezzo", typeof(double));
-            dt.Columns.Add("quantita", typeof(int));
-            dt.Columns.Add("immagine", typeof(string));
-
-
-            // Imposta la chiave primaria sulla colonna "Id"
-            dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
-
-            if(productIds != null)
+            if (Session["LoggedIn"] != null && (bool)Session["LoggedIn"])
             {
-                foreach (int productId in productIds)
+                int userId = Convert.ToInt32(Session["IdUtenti"]);
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Id", typeof(int));
+                dt.Columns.Add("nome", typeof(string));
+                dt.Columns.Add("prezzo", typeof(double));
+                dt.Columns.Add("quantita", typeof(int));
+                dt.Columns.Add("immagine", typeof(string));
+
+                // Imposta la chiave primaria sulla colonna "Id"
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
+
+                SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DbShopConnectionString"].ToString());
+
+                try
                 {
-                    try
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand($"SELECT C.Quantita, P.* FROM Carrello C " +
+                                                    $"INNER JOIN Prodotti P ON C.ProductId = P.ID " +
+                                                    $"WHERE C.UserId = {userId}", conn);
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    while (dataReader.Read())
                     {
-                        DBConn.conn.Open();
-                        SqlCommand cmd = new SqlCommand($"SELECT * FROM Prodotti WHERE ID='{productId}'", DBConn.conn);
-                        SqlDataReader dataReader = cmd.ExecuteReader();
-                        if (dataReader.HasRows)
-                        {
-                            dataReader.Read();
-                            DataRow existingRow = dt.Rows.Find(productId);
+                        int productId = Convert.ToInt32(dataReader["ID"]);
+                        DataRow existingRow = dt.Rows.Find(productId);
 
-                            if (existingRow != null)
-                            {
-                                // Articolo già presente nel carrello, incrementa la quantità
-                                existingRow["quantita"] = (int)existingRow["quantita"] + 1;
-                            }
-                            else
-                            {
-                                // Aggiungi un nuovo record al DataTable
-                                dt.Rows.Add(dataReader["Id"], dataReader["nome"], dataReader["prezzo"], 1, dataReader["immagine"]); // Imposta la quantità a 1
-                            }
+                        if (existingRow != null)
+                        {
+                            // Articolo già presente nel carrello, incrementa la quantità
+                            existingRow["quantita"] = (int)existingRow["quantita"] + 1;
+                        }
+                        else
+                        {
+                            // Aggiungi un nuovo record al DataTable
+                            dt.Rows.Add(productId, dataReader["nome"], dataReader["prezzo"], dataReader["Quantita"], dataReader["immagine"]);
                         }
                     }
-
-                    catch (Exception ex)
-                    {
-                        Response.Write(ex.ToString());
-                    }
-                    finally
-                    {
-                        if (DBConn.conn.State == ConnectionState.Open)
-                        {
-                            DBConn.conn.Close();
-                        }
-                    }              
                 }
+                catch (Exception ex)
+                {
+                    Response.Write(ex.ToString());
+                }
+                finally
+                {
+                    if (conn.State != ConnectionState.Closed)
+                    {
+                        conn.Close();
+                    }
+                }
+
+                rptCartItems.DataSource = dt;
+                rptCartItems.DataBind();
+
+                double totalCartAmount = GetTotalCartAmount(dt);
+                contentTot.InnerHtml = $"<h2>Totale: {totalCartAmount}€</h2>";
             }
-            else
-            {
-                cartContainer.Visible = false;
-                divMessage.Visible = true;
-                divMessage.InnerHtml = "<div class=\"text-center alert alert-warning\"> <h1>CARRELLO VUOTO</h1>";
-                  
-            }
-
-
-            rptCartItems.DataSource = dt;
-            rptCartItems.DataBind();
-
-            double totalCartAmount = GetTotalCartAmount(productIds);
-            contentTot.InnerHtml = $"<h2>Totale: {totalCartAmount}€</h2>";
         }
 
-
-        private double GetTotalCartAmount(List<int> productIds)
+        private double GetTotalCartAmount(DataTable dt)
         {
             double totalAmount = 0;
 
-            if (productIds != null)
+            foreach (DataRow row in dt.Rows)
             {
-                foreach (int productId in productIds)
-                {
-                    try
-                    {
-                        DBConn.conn.Open();
-                        SqlCommand cmd = new SqlCommand($"SELECT Prezzo FROM Prodotti WHERE ID='{productId}'", DBConn.conn);
-                        object result = cmd.ExecuteScalar();
-                        if (result != null)
-                        {
-                            totalAmount += Convert.ToDouble(result);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Response.Write(ex.ToString());
-                    }
-                    finally
-                    {
-                        if (DBConn.conn.State == ConnectionState.Open)
-                        {
-                            DBConn.conn.Close();
-                        }
-                    }
-                }
+                totalAmount += Convert.ToDouble(row["prezzo"]) * Convert.ToInt32(row["quantita"]);
             }
 
             return totalAmount;
@@ -135,16 +103,39 @@ namespace Buildweek4
             if (e.CommandName == "Delete")
             {
                 int productId = Convert.ToInt32(e.CommandArgument);
-                List<int> productIds = (List<int>)Session["ProductID"];
+                int userId = Convert.ToInt32(Session["IdUtenti"]);
 
-                if (productIds != null)
+                SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DbShopConnectionString"].ToString());
+
+                try
                 {
-                    // Rimuovi l'articolo dal carrello
-                    productIds.Remove(productId);
-                    Session["ProductID"] = productIds;
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Carrello WHERE UserId = @UserId AND ProductId = @ProductId", conn);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@ProductId", productId);
 
-                    // Ricarica gli elementi del carrello dopo l'eliminazione
-                    LoadCartItems();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Prodotto rimosso con successo dal carrello nel database
+                        LoadCartItems();
+                    }
+                    else
+                    {
+                        // Errore nella rimozione del prodotto dal carrello nel database
+                        // Puoi gestire l'errore o visualizzare un messaggio
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write(ex.ToString());
+                }
+                finally
+                {
+                    if (conn.State != ConnectionState.Closed)
+                    {
+                        conn.Close();
+                    }
                 }
             }
         }

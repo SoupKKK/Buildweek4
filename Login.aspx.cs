@@ -53,8 +53,11 @@ namespace Buildweek4
 
             if (ValidateUser(username, password))
             {
+                int userId = GetUserId(username); // Aggiungi questa riga per ottenere l'ID dell'utente
                 Session["LoggedIn"] = true;
                 Session["Username"] = username;
+                Session["IdUtenti"] = userId; // Imposta l'ID dell'utente nella sessione
+
                 Response.Redirect("Home.aspx");
             }
             else
@@ -63,6 +66,29 @@ namespace Buildweek4
                 divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"> <h1>Errore: Username non trovato. <br> Verifica le credenziali.</h1></div>";
             }
         }
+
+        private int GetUserId(string username)
+        {
+            // Ottieni l'ID dell'utente dalla tabella Users
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DbShopConnectionString"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SELECT IdUtenti FROM Users WHERE Username=@Username", con))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+
+                    // Esegui la query per ottenere l'ID dell'utente
+                    object result = cmd.ExecuteScalar();
+
+                    // Verifica se la query ha restituito un valore e restituisci l'ID
+                    return (result != null) ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
 
         private bool ValidateUser(string username, string password)
         {

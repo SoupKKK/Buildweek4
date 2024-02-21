@@ -20,8 +20,6 @@ CREATE TABLE Carrello (
     UserId INT,
     ProductId INT,
     Quantita INT,
-    PRIMARY KEY (UserId, ProductId),
-    FOREIGN KEY (UserId) REFERENCES Users(IdUtenti),
-    FOREIGN KEY (ProductId) REFERENCES Prodotti(Id)
+    PRIMARY KEY (UserId, ProductId)
 ); 
 

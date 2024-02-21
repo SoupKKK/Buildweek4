@@ -72,11 +72,12 @@ namespace Buildweek4
             }
             finally
             {
-                if (DBConn.conn.State == ConnectionState.Open)
+                if (DBConn.conn.State != ConnectionState.Closed)
                 {
                     DBConn.conn.Close();
                 }
             }
+
         }
 
 

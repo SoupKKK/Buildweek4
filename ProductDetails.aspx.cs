@@ -23,15 +23,25 @@ namespace BuildWeek4
             string loggedInUser = Session["Username"] as string;
 
 
-            if (!string.IsNullOrEmpty(loggedInUser) && !loggedInUser.Equals(Admin.UserName, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(loggedInUser) && loggedInUser.Equals(Admin.UserName, StringComparison.OrdinalIgnoreCase))
             {
+                // L'utente loggato è l'amministratore
+                btnAddCart.Visible = false;
+                ProductID = Request.QueryString["product"].ToString();
+                ProductDetailsBtns.InnerHtml = "<a href=\"EditProduct.aspx?product=" + ProductID + "\" class=\"btn btn-warning me-2\">Modifica</a>";
+            }
+            else if (!string.IsNullOrEmpty(loggedInUser))
+            {
+                // L'utente non è l'amministratore, ma è loggato
                 btnAddCart.Visible = true;
             }
             else
             {
-                ProductID = Request.QueryString["product"].ToString();
-                ProductDetailsBtns.InnerHtml = "<a href=\"EditProduct.aspx?product=" + ProductID + "\" class=\"btn btn-warning me-2\">Modifica</a>";
+                // Nessun utente è loggato
+                btnAddCart.Visible = false;
             }
+
+
 
 
 
@@ -75,21 +85,49 @@ namespace BuildWeek4
 
         protected void btnAddCart_Click(object sender, EventArgs e)
         {
-            int prodID = int.Parse(ProductID);
-            List<int> products;
-            if (Session["ProductID"] == null)
+            if (Session["LoggedIn"] != null && (bool)Session["LoggedIn"])
             {
-                products = new List<int>();
+                int userId = Convert.ToInt32(Session["IdUtenti"]);
+                int productId = int.Parse(ProductID);
+                int quantity = 1; // Puoi impostare la quantità iniziale a 1, o come necessario
+
+                try
+                {
+                    DBConn.conn.Open();
+                    SqlCommand cmd = new SqlCommand("MERGE INTO Carrello AS target " +
+                                                    "USING (VALUES (@UserId, @ProductId, @Quantity)) AS source (UserId, ProductId, Quantity) " +
+                                                    "ON target.UserId = source.UserId AND target.ProductId = source.ProductId " +
+                                                    "WHEN MATCHED THEN " +
+                                                    "UPDATE SET target.Quantita = target.Quantita + source.Quantity " +
+                                                    "WHEN NOT MATCHED THEN " +
+                                                    "INSERT (UserId, ProductId, Quantita) VALUES (source.UserId, source.ProductId, source.Quantity);", DBConn.conn);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@ProductId", productId);
+                    cmd.Parameters.AddWithValue("@Quantity", quantity);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Il prodotto è stato aggiunto con successo al carrello
+                    }
+                    else
+                    {
+                        // Errore nell'aggiunta del prodotto al carrello
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write(ex.ToString());
+                }
+                finally
+                {
+                    if (DBConn.conn.State == ConnectionState.Open)
+                    {
+                        DBConn.conn.Close();
+                    }
+                }
             }
-            else
-            {
-                products = (List<int>)Session["ProductID"];
-            }
-
-            products.Add(prodID);
-
-            Session["ProductID"] = products;
-
         }
+
     }
 }

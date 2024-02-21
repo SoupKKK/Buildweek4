@@ -78,6 +78,8 @@
     <Content Include="Style\Login.css" />
     <Content Include="Style\Nav.css" />
     <Content Include="Style\ProductDetails.css" />
+    <Content Include="Style\UsersCarts.css" />
+    <Content Include="UsersCarts.aspx" />
     <Content Include="Web.config" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
@@ -136,6 +138,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UsersCarts.aspx.cs">
+      <DependentUpon>UsersCarts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UsersCarts.aspx.designer.cs">
+      <DependentUpon>UsersCarts.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
