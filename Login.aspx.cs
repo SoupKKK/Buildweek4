@@ -51,21 +51,30 @@ namespace Buildweek4
             string username = txtUsername.Value;
             string password = txtPassword.Value;
 
-            if (ValidateUser(username, password))
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                int userId = GetUserId(username); // Aggiungi questa riga per ottenere l'ID dell'utente
-                Session["LoggedIn"] = true;
-                Session["Username"] = username;
-                Session["IdUtenti"] = userId; // Imposta l'ID dell'utente nella sessione
-
-                Response.Redirect("Home.aspx");
+                divErrorMessage.Visible = true;
+                divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"> <h1>Errore: Inserisci username e password.</h1></div>";
             }
             else
             {
-                divErrorMessage.Visible = true;
-                divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"> <h1>Errore: Username non trovato. <br> Verifica le credenziali.</h1></div>";
+                if (ValidateUser(username, password))
+                {
+                    int userId = GetUserId(username);
+                    Session["LoggedIn"] = true;
+                    Session["Username"] = username;
+                    Session["IdUtenti"] = userId;
+
+                    Response.Redirect("Home.aspx");
+                }
+                else
+                {
+                    divErrorMessage.Visible = true;
+                    divErrorMessage.InnerHtml = "<div class=\"alert alert-danger\"> <h1>Errore: Username non trovato. <br> Verifica le credenziali.</h1></div>";
+                }
             }
         }
+
 
         private int GetUserId(string username)
         {
