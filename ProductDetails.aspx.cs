@@ -29,7 +29,8 @@ namespace BuildWeek4
             }
             else
             {
-                btnAddCart.Visible = false;
+                ProductID = Request.QueryString["product"].ToString();
+                ProductDetailsBtns.InnerHtml = "<a href=\"EditProduct.aspx?product=" + ProductID + "\" class=\"btn btn-warning me-2\">Modifica</a>";
             }
 
 

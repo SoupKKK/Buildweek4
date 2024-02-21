@@ -1,0 +1,25 @@
+CREATE TABLE Prodotti (
+    Id INT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    prezzo DECIMAL(10,2) NOT NULL,
+    descrizione TEXT NOT NULL,
+    immagine VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE Users (
+    IdUtenti INT PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE Carrello (
+    UserId INT,
+    ProductId INT,
+    Quantita INT,
+    PRIMARY KEY (UserId, ProductId),
+    FOREIGN KEY (UserId) REFERENCES Users(IdUtenti),
+    FOREIGN KEY (ProductId) REFERENCES Prodotti(Id)
+); 
+

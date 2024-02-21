@@ -229,6 +229,7 @@ a.buy-btn {
     }
 }
 
+
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -240,6 +241,8 @@ a.buy-btn {
     max-width: 50%; /* 50% larghezza su schermi grandi */
     padding: 10px; /* Regolare a seconda delle tue esigenze di spaziatura */
 }
+
+.
 
 @media (min-width: 576px) {
     .col-sm-4 {

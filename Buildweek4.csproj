@@ -70,8 +70,10 @@
     <Content Include="Cart.aspx" />
     <Content Include="EditProduct.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Media\kiss-svgrepo-com %281%29.svg" />
     <Content Include="ProductDetails.aspx" />
     <Content Include="ProductsTable.aspx" />
+    <Content Include="Style\Cart.css" />
     <Content Include="Style\Home.css" />
     <Content Include="Style\Login.css" />
     <Content Include="Style\Nav.css" />
@@ -148,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DBsql\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

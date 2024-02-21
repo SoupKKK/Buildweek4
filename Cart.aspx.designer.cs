@@ -24,13 +24,13 @@ namespace Buildweek4
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMessage;
 
         /// <summary>
-        /// Controllo contentTot.
+        /// Controllo cartContainer.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl contentTot;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl cartContainer;
 
         /// <summary>
         /// Controllo htmlContent.
@@ -49,5 +49,14 @@ namespace Buildweek4
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptCartItems;
+
+        /// <summary>
+        /// Controllo contentTot.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl contentTot;
     }
 }
